@@ -45,7 +45,7 @@ $STD curl -O https://downloads.filestash.app/latest/docker-compose.yml
 msg_ok "Pulled Filestash Compose File"
 
 msg_info "Launching Filestash Stack"
-$STD docker compose up -d
+$STD docker compose -p filestash up -d
 msg_ok "Launched Filestash Stack"
 
 motd_ssh
