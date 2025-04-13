@@ -32,8 +32,10 @@ msg_info "Pulling DisplateBot Image"
 $STD docker pull suroh/displatebot:v1.4
 msg_ok "Pulled DisplateBot Image"
 
+read -r -p "Please enter your telegram bot token: " token
+
 msg_info "Launching DisplateBot Container"
-$STD docker run -e TELEGRAM_BOT_TOKEN=$var_apikey suroh/displatebot:v1.4
+$STD docker run -e TELEGRAM_BOT_TOKEN=${token} suroh/displatebot:v1.4
 msg_ok "Launched DisplateBot Container"
 
 motd_ssh
