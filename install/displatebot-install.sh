@@ -32,7 +32,7 @@ read -r -p "Please enter your telegram bot token: " token
 export BOT_TOKEN=$token
 
 msg_info "Launching DisplateBot Container"
-$STD docker run -e TELEGRAM_BOT_TOKEN="$BOT_TOKEN" -d suroh/displatebot:v1.4
+$STD docker run -d -e TELEGRAM_BOT_TOKEN="$BOT_TOKEN" suroh/displatebot:v1.4
 msg_ok "Launched DisplateBot Container"
 
 motd_ssh
