@@ -13,29 +13,27 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
-$STD apk add newt \
-	curl \
-	openssh \
-	tzdata \
-	nano \
-	mc
-msg_ok "Installed Dependencies"
+get_latest_release() {
+  curl -fsSL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4
+}
 
-msg_info "Installing Docker"
-$STD apk add docker
-$STD rc-service docker start
-$STD rc-update add docker default
-msg_ok "Installed Docker"
+DOCKER_LATEST_VERSION=$(get_latest_release "moby/moby")
+
+msg_info "Installing Docker $DOCKER_LATEST_VERSION"
+DOCKER_CONFIG_PATH='/etc/docker/daemon.json'
+mkdir -p $(dirname $DOCKER_CONFIG_PATH)
+echo -e '{\n  "log-driver": "journald"\n}' >/etc/docker/daemon.json
+$STD sh <(curl -fsSL https://get.docker.com)
+msg_ok "Installed Docker $DOCKER_LATEST_VERSION"
 
 msg_info "Pulling DisplateBot Image"
-$STD docker pull suroh/displatebot:v1.4
+$STD docker pull suroh/displatebot:latest
 msg_ok "Pulled DisplateBot Image"
 
 read -r -p "Please enter your telegram bot token: " token
 
 msg_info "Launching DisplateBot Container"
-$STD docker run -e TELEGRAM_BOT_TOKEN="$token" suroh/displatebot:v1.4
+$STD docker run -e TELEGRAM_BOT_TOKEN="$token" suroh/displatebot:latest
 msg_ok "Launched DisplateBot Container"
 
 motd_ssh
